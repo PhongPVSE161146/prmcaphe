@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SeafoodTextStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+    <style name="BottomNavTextActive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10dp</item> <!-- Kích thước chữ khi item được chọn -->
+    </style>
+
+    <style name="BottomNavTextInactive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10dp</item> <!-- Kích thước chữ khi item KHÔNG được chọn -->
+    </style>
+</resources>

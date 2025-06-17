@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm Món Ăn Mơi"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Tên món -->
+        <EditText
+            android:id="@+id/edtFoodName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên món ăn"
+            android:inputType="textCapWords"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Mô tả -->
+        <EditText
+            android:id="@+id/edtFoodDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mô tả"
+            android:inputType="textCapWords"
+            android:padding="12dp"
+
+            android:layout_marginBottom="16dp" />
+
+        <!-- Giá -->
+        <EditText
+            android:id="@+id/edtFoodPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Giá (VNĐ)"
+            android:inputType="numberDecimal"
+            android:padding="12dp"
+
+            android:layout_marginBottom="16dp" />
+
+        <!-- Trạng thái -->
+        <EditText
+            android:id="@+id/edtFoodStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Trạng thái (Còn / Hết)"
+            android:inputType="text"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Ảnh + nút chọn ảnh -->
+        <ImageView
+            android:id="@+id/imgFood"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_image_placeholder"/>
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chọn ảnh"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Nút Lưu -->
+        <Button
+            android:id="@+id/btnSaveFood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LƯU MÓN ĂN"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:padding="14dp" />
+
+    </LinearLayout>
+</ScrollView>

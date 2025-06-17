@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical">
+
+
+    <!-- Food Image -->
+    <ImageView
+        android:id="@+id/foodImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_profile"
+        android:contentDescription="Food Image" />
+
+    <!-- Text Information -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/foodName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/foodDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/foodPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="14sp"
+            android:textColor="#FF4500"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+    <!-- Order Button -->
+    <ImageButton
+        android:id="@+id/btnOrder"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_add_white"
+        android:background="@drawable/btn_add_to_cart"
+        android:scaleType="center"
+        android:padding="6dp"
+        android:contentDescription="Add to cart" />
+
+</LinearLayout>

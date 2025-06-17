@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#4A8460"
+    android:padding="24dp">
+
+    <!-- Card Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/login_card_background"
+        android:gravity="center"
+        android:elevation="6dp">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coffee"
+            android:textSize="20sp"
+            android:textColor="#4A8460" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shop"
+            android:textSize="20sp"
+            android:textColor="#4A8460"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register new account"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#4A8460"
+            android:layout_marginTop="8dp" />
+
+        <!-- Username -->
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your username"
+            android:layout_marginTop="16dp"
+            android:padding="10dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:inputType="textPersonName" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your email"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:inputType="textEmailAddress" />
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter password"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:inputType="textPassword" />
+
+        <!-- Repeat Password -->
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your phone"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/et_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your address"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:inputType="text" />
+
+        <!-- Sign Up Button -->
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Sign up"
+            android:textColor="#000000"
+            android:backgroundTint="#FFFFFF"
+            android:background="@drawable/signup_button_border"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</LinearLayout>
