@@ -68,6 +68,7 @@ public class Home extends AppCompatActivity {
         etSearch = findViewById(R.id.etSearch);
 //        insertSampleFoods(); // Nếu cần insert mẫu
 //      ok
+//      OOKK
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("email", ""); // Email mặc định là ""
         if (!userEmail.isEmpty()) {
