@@ -11,11 +11,11 @@ public class Cart {
     }
 
     public Cart(int id, int userId, double totalPrice, String status, String createdAt) {
-        this.id = id;
-        this.userId = userId;
-        this.totalPrice = totalPrice;
-        this.status = status;
-        this.createdAt = createdAt;
+        this.id = id;       // ID của giỏ hàng
+        this.userId = userId;// ID của người dùng sở hữu giỏ hàng
+        this.totalPrice = totalPrice;// tổng giá trị của giỏ hàng
+        this.status = status; // "pending", "completed", "cancelled"
+        this.createdAt = createdAt; // định dạng "yyyy-MM-dd HH:mm:ss"
     }
 
     // Getters và setters
