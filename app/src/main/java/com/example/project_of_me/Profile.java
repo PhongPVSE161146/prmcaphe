@@ -24,8 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profile extends AppCompatActivity {
     private UserDAO user;
-    private TextView tvEditProfile, tvChangePassword, tvLogout;
-    private TextView tvUsername, tvEmail;
+    private TextView tvEditProfile, tvChangePassword, tvLogout;// Thêm các TextView cho các mục khác
+    private TextView tvUsername, tvEmail;// Thêm TextView cho tên người dùng và email
     private ImageView tvImg;
     private BottomNavigationView bottomNavigationView;
     // Mục "Món ăn yêu thích" đã có
