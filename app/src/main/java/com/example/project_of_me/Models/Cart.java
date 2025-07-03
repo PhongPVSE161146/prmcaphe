@@ -20,9 +20,9 @@ public class Cart {
 
     // Getters và setters
     public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) { this.id = id; } // ID của giỏ hàng
 
-    public int getUserId() { return userId; }
+    public int getUserId() { return userId; } // ID của người dùng sở hữu giỏ hàng
     public void setUserId(int userId) { this.userId = userId; }
 
     public double getTotalPrice() { return totalPrice; }
