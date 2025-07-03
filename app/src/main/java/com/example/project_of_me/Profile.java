@@ -28,23 +28,31 @@ public class Profile extends AppCompatActivity {
     private TextView tvUsername, tvEmail;
     private ImageView tvImg;
     private BottomNavigationView bottomNavigationView;
-    // Mục "Món ăn yêu thích" đã có
+    // Mục "Đồ uống yêu thích" đã có
     private TextView btnFavorites;
     // Mục "Đơn hàng của bạn"
     private LinearLayout llPlacedOrders;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        user = new UserDAO(this);
-        tvUsername = findViewById(R.id.tvUserName);
+        super.onCreate(savedInstanceState); // Gọi phương thức onCreate của lớp cha
+        setContentView(R.layout.activity_profile); // Gán layout XML tương ứng cho Activity này
+
+        user = new UserDAO(this); // Khởi tạo DAO để làm việc với dữ liệu người dùng
+        tvUsername = findViewById(R.id.tvUserName); // Gán biến hiển thị tên người dùng với ID trong layout
+
+        // Lấy dữ liệu SharedPreferences chứa thông tin đăng nhập người dùng
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
-        String emailPref = sharedPreferences.getString("email", null);
+        String emailPref = sharedPreferences.getString("email", null); // Lấy email đã lưu
+
+        // Nếu có email lưu trong SharedPreferences thì hiển thị thông báo chào mừng
         if (emailPref != null) {
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
+
+        // Gọi phương thức để lấy thông tin người dùng từ database và hiển thị
         getUserInfo(emailPref);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
