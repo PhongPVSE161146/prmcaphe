@@ -71,18 +71,22 @@ public class PlacedOrderAdapter extends RecyclerView.Adapter<PlacedOrderAdapter.
             }
         });
     }
-    
+
     @Override
     public int getItemCount() {
+        // Trả về số lượng đơn hàng trong danh sách
         return cartList.size();
     }
 
+    // ViewHolder chứa các View tương ứng với một đơn hàng
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
         public TextView tvProductName, tvTotalPrice, tvCreatedAt, tvOrderStatus;
         public ImageView ivDeleteOrder, ivOrderIcon;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            // Ánh xạ các view trong layout item_order_summary
             ivOrderIcon = itemView.findViewById(R.id.ivOrderIcon);
             tvTotalPrice = itemView.findViewById(R.id.tvTotalPrice);
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
