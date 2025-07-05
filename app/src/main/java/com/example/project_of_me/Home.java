@@ -67,6 +67,7 @@ public class Home extends AppCompatActivity {
         coffeeDAO = new CoffeeDAO(this);
         etSearch = findViewById(R.id.etSearch);
 //        insertSampleFoods(); // Nếu cần insert mẫu
+//      ok
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("email", ""); // Email mặc định là ""
         if (!userEmail.isEmpty()) {
@@ -184,7 +185,7 @@ public class Home extends AppCompatActivity {
             String cop10Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop10));
             String cop11Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop11));
 
-            // Món 1 - Phở Bò
+            // Đồ uống 1 
             Coffee cop1 = new Coffee();
             cop1.setProductName("Americano");
             cop1.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -195,7 +196,7 @@ public class Home extends AppCompatActivity {
             cop1.setCategoryID(1);
             coffeeDAO.insertCoffee(cop1);
 
-            // Món 2 - Bánh Mì Thịt
+            // Đồ uống 2 
             Coffee cop2 = new Coffee();
             cop2.setProductName("Chocolate");
             cop2.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -206,7 +207,7 @@ public class Home extends AppCompatActivity {
             cop2.setCategoryID(1);
             coffeeDAO.insertCoffee(cop2);
 
-            // Món 3 - Cơm Tấm Sườn
+            // Đồ uống 3
             Coffee cop3 = new Coffee();
             cop3.setProductName("Ice Cappuchino");
             cop3.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -216,7 +217,8 @@ public class Home extends AppCompatActivity {
             cop3.setImageURL(cop3Image); // Gán ảnh đã chuyển đổi
             cop3.setCategoryID(1);
             coffeeDAO.insertCoffee(cop3);
-            // Món 4 - Bún Chả
+
+            // Đồ uống 4
             Coffee cop4 = new Coffee();
             cop4.setProductName("Ice Americano");
             cop4.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -227,7 +229,7 @@ public class Home extends AppCompatActivity {
             cop4.setCategoryID(1);
             coffeeDAO.insertCoffee(cop4);
 
-            // Món 5 - Gỏi Cuốn
+            // Đồ uống 5
             Coffee cop5 = new Coffee();
             cop5.setProductName("Ice Americano");
             cop5.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -238,6 +240,7 @@ public class Home extends AppCompatActivity {
             cop5.setCategoryID(1);
             coffeeDAO.insertCoffee(cop5);
 
+            // Đồ uống 6
             Coffee cop6 = new Coffee();
             cop6.setProductName("IMacha Latte");
             cop6.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -248,6 +251,7 @@ public class Home extends AppCompatActivity {
             cop6.setCategoryID(1);
             coffeeDAO.insertCoffee(cop6);
 
+            // Đồ uống 7
             Coffee cop7 = new Coffee();
             cop7.setProductName("Mocha");
             cop7.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -258,6 +262,7 @@ public class Home extends AppCompatActivity {
             cop7.setCategoryID(2);
             coffeeDAO.insertCoffee(cop7);
 
+            // Đồ uống 8
             Coffee cop8 = new Coffee();
             cop8.setProductName("Ice Cappuchino");
             cop8.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -268,6 +273,8 @@ public class Home extends AppCompatActivity {
             cop8.setCategoryID(2);
             coffeeDAO.insertCoffee(cop8);
 
+
+            // Đồ uống 9
             Coffee cop9 = new Coffee();
             cop9.setProductName("Ice Matcha");
             cop9.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -278,6 +285,8 @@ public class Home extends AppCompatActivity {
             cop9.setCategoryID(2);
             coffeeDAO.insertCoffee(cop9);
 
+
+            // Đồ uống 10
             Coffee cop10 = new Coffee();
             cop10.setProductName("Ice Americano2");
             cop10.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
@@ -288,6 +297,8 @@ public class Home extends AppCompatActivity {
             cop10.setCategoryID(2);
             coffeeDAO.insertCoffee(cop10);
 
+
+            // Đồ uống 11
             Coffee cop11 = new Coffee();
             cop11.setProductName("Ice Americano1");
             cop11.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
