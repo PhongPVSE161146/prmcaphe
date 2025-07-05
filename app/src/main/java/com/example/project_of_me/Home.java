@@ -22,13 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-
 import android.content.Context;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -52,8 +50,8 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        UserDAO userDAO = new UserDAO(this);
 
+        // Ánh xạ các thành phần giao diện
         recyclerView = findViewById(R.id.recyclerHotDrink);
         recyclerViewCold = findViewById(R.id.recyclerColdDrink);
         tvSeeAll = findViewById(R.id.tvSeeAll);
@@ -64,81 +62,63 @@ public class Home extends AppCompatActivity {
         imgCart = findViewById(R.id.imgCart);
         imgUser = findViewById(R.id.imgUser);
         tvTitle = findViewById(R.id.tvTitle);
-        coffeeDAO = new CoffeeDAO(this);
         etSearch = findViewById(R.id.etSearch);
-//        insertSampleFoods(); // Nếu cần insert mẫu
-//      ok
+        tvCartCount = findViewById(R.id.tvCartCount);
+
+        coffeeDAO = new CoffeeDAO(this);
+        cartBadgeManager = CartBadgeManager.getInstance(this, tvCartCount);
+
+        // Nếu cần, có thể thêm dữ liệu mẫu
+        // insertSampleFoods();
+
+        // Lấy dữ liệu người dùng đang đăng nhập
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
-        String userEmail = sharedPreferences.getString("email", ""); // Email mặc định là ""
+        String userEmail = sharedPreferences.getString("email", "");
         if (!userEmail.isEmpty()) {
+            UserDAO userDAO = new UserDAO(this);
             User user = userDAO.getUserByEmail(userEmail);
             if (user != null) {
-//                tvWelcome.setText("Welcome " + user.getName());
+                // Hiển thị thông tin người dùng nếu cần
             }
         }
-        // Lấy danh sách món ăn từ cơ sở dữ liệu
+
+        // Lấy danh sách cà phê từ cơ sở dữ liệu
         listCoffeeHot = coffeeDAO.getAllCoffeeByType("hot");
         listCoffeeCold = coffeeDAO.getAllCoffeeByType("cold");
+
         Log.d("HomeActivity", "Hot Coffee List Size: " + listCoffeeHot.size());
         Log.d("HomeActivity", "Cold Coffee List Size: " + listCoffeeCold.size());
+
         // Thiết lập Adapter cho RecyclerView
         adapterHot = new ProductAdapter(this, listCoffeeHot);
         adapterCold = new ProductAdapter(this, listCoffeeCold);
-
-        // Gán adapter vào RecyclerView
         recyclerView.setAdapter(adapterHot);
         recyclerViewCold.setAdapter(adapterCold);
-        tvSeeAll.setOnClickListener(v -> {
-            // Chuyển đến Activity khác khi nhấn vào tvSeeAll
-            Intent intent = new Intent(Home.this, List_All_Drink.class);
-            startActivity(intent);
-        });
-        tvSeeAll1.setOnClickListener(v -> {
-            // Chuyển đến Activity khác khi nhấn vào tvSeeAll
-            Intent intent = new Intent(Home.this, List_All_Drink.class);
-            startActivity(intent);
-        });
-        tvSeeAll2.setOnClickListener(v -> {
-            // Chuyển đến Activity khác khi nhấn vào tvSeeAll
-            Intent intent = new Intent(Home.this, List_All_Drink.class);
-            startActivity(intent);
+
+        // Sự kiện click chuyển trang
+        tvSeeAll.setOnClickListener(v -> startActivity(new Intent(Home.this, List_All_Drink.class)));
+        tvSeeAll1.setOnClickListener(v -> startActivity(new Intent(Home.this, List_All_Drink.class)));
+        tvSeeAll2.setOnClickListener(v -> startActivity(new Intent(Home.this, List_All_Drink.class)));
+
+        imgUser.setOnClickListener(v -> {
+            startActivity(new Intent(Home.this, Profile.class));
+            Toast.makeText(Home.this, "Đang chuyển đến hồ sơ", Toast.LENGTH_SHORT).show();
         });
 
-        imgUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Profile.class);
-                startActivity(intent);
-                Toast.makeText(Home.this, "Quantity increased", Toast.LENGTH_SHORT).show();
-            }
-        });
-        tvTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Home.class);
-                startActivity(intent);
-                Toast.makeText(Home.this, "Quantity increased", Toast.LENGTH_SHORT).show();
-            }
+        tvTitle.setOnClickListener(v -> {
+            startActivity(new Intent(Home.this, Home.class));
+            Toast.makeText(Home.this, "Đã quay về trang chủ", Toast.LENGTH_SHORT).show();
         });
 
-        imgCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, Order.class);
-                startActivity(intent);
-                Toast.makeText(Home.this, "Quantity increased", Toast.LENGTH_SHORT).show();
-            }
+        imgCart.setOnClickListener(v -> {
+            startActivity(new Intent(Home.this, Order.class));
+            Toast.makeText(Home.this, "Đang chuyển đến giỏ hàng", Toast.LENGTH_SHORT).show();
         });
-
-        // Khởi tạo badge giỏ hàng
-        tvCartCount = findViewById(R.id.tvCartCount);
-        cartBadgeManager = CartBadgeManager.getInstance(this, tvCartCount);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Cập nhật số lượng item trong giỏ hàng mỗi khi activity được resume
         cartBadgeManager.updateCartCount();
     }
 
@@ -154,164 +134,48 @@ public class Home extends AppCompatActivity {
 
     public String saveImageToInternalStorage(Bitmap bitmap) {
         Context context = getApplicationContext();
-        FileOutputStream fos = null;
-        File directory = context.getFilesDir(); // Lưu trong bộ nhớ trong
+        File directory = context.getFilesDir();
         String fileName = "coffee_image_" + System.currentTimeMillis() + ".png";
         File file = new File(directory, fileName);
-
-        try {
-            fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);  // Nén ảnh thành PNG
-            fos.close();
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return file.getAbsolutePath();  // Trả về đường dẫn tới tệp ảnh
+        return file.getAbsolutePath();
     }
 
+    // Phương thức insert dữ liệu mẫu có thể bật nếu cần
     private void insertSampleFoods() {
-        // Chỉ thêm dữ liệu mẫu nếu CSDL trống
         if (coffeeDAO.getCoffeeCount() == 0) {
             Context context = this;
-            String cop1Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop1));
-            String cop2Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop2));
-            String cop3Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.co3));
-            String cop4Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop4));
-            String cop5Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop5));
-            String cop6Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop6));
-            String cop7Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop7));
-            String cop8Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop8));
-            String cop9Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop9));
-            String cop10Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop10));
-            String cop11Image = saveImageToInternalStorage(getBitmapFromDrawable(context, R.drawable.cop11));
+            String[] names = {
+                "Americano", "Chocolate", "Ice Cappuchino", "Ice Americano",
+                "Ice Americano", "IMacha Latte", "Mocha", "Ice Cappuchino",
+                "Ice Matcha", "Ice Americano2", "Ice Americano1"
+            };
 
-            // Đồ uống 1 
-            Coffee cop1 = new Coffee();
-            cop1.setProductName("Americano");
-            cop1.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop1.setBriefDescription("");
-            cop1.setTechnicalSpecifications("");
-            cop1.setPrice(10000);
-            cop1.setImageURL(cop1Image); // Gán ảnh đã chuyển đổi
-            cop1.setCategoryID(1);
-            coffeeDAO.insertCoffee(cop1);
+            int[] images = {
+                R.drawable.cop1, R.drawable.cop2, R.drawable.co3, R.drawable.cop4,
+                R.drawable.cop5, R.drawable.cop6, R.drawable.cop7, R.drawable.cop8,
+                R.drawable.cop9, R.drawable.cop10, R.drawable.cop11
+            };
 
-            // Đồ uống 2 
-            Coffee cop2 = new Coffee();
-            cop2.setProductName("Chocolate");
-            cop2.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop2.setBriefDescription("");
-            cop2.setTechnicalSpecifications("");
-            cop2.setPrice(35000);
-            cop2.setImageURL(cop2Image); // Gán ảnh đã chuyển đổi
-            cop2.setCategoryID(1);
-            coffeeDAO.insertCoffee(cop2);
+            for (int i = 0; i < names.length; i++) {
+                Coffee coffee = new Coffee();
+                coffee.setProductName(names[i]);
+                coffee.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
+                coffee.setBriefDescription("");
+                coffee.setTechnicalSpecifications("");
+                coffee.setPrice(45000 + i * 1000);
+                coffee.setImageURL(saveImageToInternalStorage(getBitmapFromDrawable(context, images[i])));
+                coffee.setCategoryID(i < 6 ? 1 : 2);
+                coffeeDAO.insertCoffee(coffee);
+            }
 
-            // Đồ uống 3
-            Coffee cop3 = new Coffee();
-            cop3.setProductName("Ice Cappuchino");
-            cop3.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop3.setBriefDescription("");
-            cop3.setTechnicalSpecifications("");
-            cop3.setPrice(65000);
-            cop3.setImageURL(cop3Image); // Gán ảnh đã chuyển đổi
-            cop3.setCategoryID(1);
-            coffeeDAO.insertCoffee(cop3);
-
-            // Đồ uống 4
-            Coffee cop4 = new Coffee();
-            cop4.setProductName("Ice Americano");
-            cop4.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop4.setBriefDescription("");
-            cop4.setTechnicalSpecifications("");
-            cop4.setPrice(60000);
-            cop4.setImageURL(cop4Image); // Gán ảnh đã chuyển đổi
-            cop4.setCategoryID(1);
-            coffeeDAO.insertCoffee(cop4);
-
-            // Đồ uống 5
-            Coffee cop5 = new Coffee();
-            cop5.setProductName("Ice Americano");
-            cop5.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop5.setBriefDescription("");
-            cop5.setTechnicalSpecifications("");
-            cop5.setPrice(45000);
-            cop5.setImageURL(cop5Image); // Gán ảnh đã chuyển đổi
-            cop5.setCategoryID(1);
-            coffeeDAO.insertCoffee(cop5);
-
-            // Đồ uống 6
-            Coffee cop6 = new Coffee();
-            cop6.setProductName("IMacha Latte");
-            cop6.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop6.setBriefDescription("");
-            cop6.setTechnicalSpecifications("");
-            cop6.setPrice(45000);
-            cop6.setImageURL(cop6Image); // Gán ảnh đã chuyển đổi
-            cop6.setCategoryID(1);
-            coffeeDAO.insertCoffee(cop6);
-
-            // Đồ uống 7
-            Coffee cop7 = new Coffee();
-            cop7.setProductName("Mocha");
-            cop7.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop7.setBriefDescription("");
-            cop7.setTechnicalSpecifications("");
-            cop7.setPrice(45000);
-            cop7.setImageURL(cop7Image); // Gán ảnh đã chuyển đổi
-            cop7.setCategoryID(2);
-            coffeeDAO.insertCoffee(cop7);
-
-            // Đồ uống 8
-            Coffee cop8 = new Coffee();
-            cop8.setProductName("Ice Cappuchino");
-            cop8.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop8.setBriefDescription("");
-            cop8.setTechnicalSpecifications("");
-            cop8.setPrice(45000);
-            cop8.setImageURL(cop8Image); // Gán ảnh đã chuyển đổi
-            cop8.setCategoryID(2);
-            coffeeDAO.insertCoffee(cop8);
-
-
-            // Đồ uống 9
-            Coffee cop9 = new Coffee();
-            cop9.setProductName("Ice Matcha");
-            cop9.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop9.setBriefDescription("");
-            cop9.setTechnicalSpecifications("");
-            cop9.setPrice(45000);
-            cop9.setImageURL(cop9Image); // Gán ảnh đã chuyển đổi
-            cop9.setCategoryID(2);
-            coffeeDAO.insertCoffee(cop9);
-
-
-            // Đồ uống 10
-            Coffee cop10 = new Coffee();
-            cop10.setProductName("Ice Americano2");
-            cop10.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop10.setBriefDescription("");
-            cop10.setTechnicalSpecifications("");
-            cop10.setPrice(45000);
-            cop10.setImageURL(cop10Image); // Gán ảnh đã chuyển đổi
-            cop10.setCategoryID(2);
-            coffeeDAO.insertCoffee(cop10);
-
-
-            // Đồ uống 11
-            Coffee cop11 = new Coffee();
-            cop11.setProductName("Ice Americano1");
-            cop11.setFullDescription("A classic hot coffee made with a shot of espresso and hot water.");
-            cop11.setBriefDescription("");
-            cop11.setTechnicalSpecifications("");
-            cop11.setPrice(45000);
-            cop11.setImageURL(cop11Image); // Gán ảnh đã chuyển đổi
-            cop11.setCategoryID(2);
-            coffeeDAO.insertCoffee(cop11);
-
-            Toast.makeText(this, "Đã thêm 5 món ăn mẫu vào CSDL", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã thêm món mẫu", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Dữ liệu mẫu đã có trong CSDL", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Dữ liệu mẫu đã tồn tại", Toast.LENGTH_SHORT).show();
         }
     }
 }

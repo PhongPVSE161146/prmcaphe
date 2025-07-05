@@ -9,9 +9,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.project_of_me.DAO.UserDAO;
 import com.example.project_of_me.Utils.PasswordHasher;
@@ -20,24 +17,25 @@ public class Change_Password extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Hàm được gọi khi Activity được tạo lần đầu
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_change_password);
+        EdgeToEdge.enable(this); // Kích hoạt hiển thị toàn màn hình (Edge-to-Edge)
+        setContentView(R.layout.activity_change_password); // Gắn layout giao diện cho Activity
 
-        // Khởi tạo DAO để làm việc với database người dùng
+        // Khởi tạo DAO để thao tác với dữ liệu người dùng
         UserDAO user = new UserDAO(this);
 
-        // Ánh xạ các thành phần giao diện
+        // Ánh xạ các thành phần giao diện với biến Java
         EditText emailUser = findViewById(R.id.etEmail);              // Email người dùng
         EditText new_pass = findViewById(R.id.etNewPassword);         // Mật khẩu mới
         EditText cofirm_pass = findViewById(R.id.etConfirmPassword);  // Mật khẩu xác nhận
         Button btn_change_pass = findViewById(R.id.btnSend);          // Nút đổi mật khẩu
 
-        // Xử lý khi nhấn nút "Đổi mật khẩu"
+        // Xử lý sự kiện khi người dùng nhấn nút "Đổi mật khẩu"
         btn_change_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lấy dữ liệu từ các ô nhập
+                // Lấy dữ liệu nhập vào từ người dùng
                 String email = emailUser.getText().toString().trim();
                 String password_new = new_pass.getText().toString().trim();
                 String confirm_password = cofirm_pass.getText().toString().trim();
