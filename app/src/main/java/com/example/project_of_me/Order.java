@@ -146,30 +146,33 @@ public class Order extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (orderAdapter != null) {
-                    // Lấy danh sách các order item được tick chọn
+                    // Lấy danh sách các item được người dùng chọn
                     List<CartItemDetail> selectedItems = orderAdapter.getSelectedItems();
+
+                    // Nếu không chọn gì, hiển thị cảnh báo
                     if (selectedItems.isEmpty()) {
                         Toast.makeText(Order.this, "Vui lòng chọn ít nhất 1 sản phẩm để đặt hàng", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // Tính tổng tiền của các item được chọn
+                    // Tính tổng tiền của các sản phẩm được chọn
                     double totalSelected = 0;
                     for (CartItemDetail item : selectedItems) {
                         totalSelected += item.getPrice() * item.getQuantity();
                     }
 
-                    // Sử dụng CartDAO.checkoutCart() để đặt hàng
-                    int orderId = cartDAO.checkoutCart(userId, "Cash", ""); // Mặc định thanh toán tiền mặt và không có địa chỉ
-                    
+                    // Tiến hành đặt hàng với phương thức thanh toán mặc định là "Cash"
+                    int orderId = cartDAO.checkoutCart(userId, "Cash", ""); // Không có địa chỉ
+
                     if (orderId != -1) {
-                        // Chuyển sang OrderSuccessActivity, truyền tổng tiền và orderId
+                        // Thành công: chuyển sang màn hình thành công
                         Intent intent = new Intent(Order.this, OrderSuccessActivity.class);
                         intent.putExtra("total_amount", totalSelected);
                         intent.putExtra("order_id", orderId);
                         startActivity(intent);
                         finish();
                     } else {
+                        // Thất bại: thông báo lỗi
                         Toast.makeText(Order.this, "Đặt hàng thất bại", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -177,6 +180,8 @@ public class Order extends AppCompatActivity {
                 }
             }
         });
+
+        // Sự kiện nhấn vào icon user → sang màn hình đơn hàng đã đặt
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +190,8 @@ public class Order extends AppCompatActivity {
                 Toast.makeText(Order.this, "Quantity increased", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Nhấn vào tiêu đề → về trang chủ
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +201,7 @@ public class Order extends AppCompatActivity {
             }
         });
 
+        // Nhấn lại biểu tượng giỏ hàng → reload lại activity
         imgCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,7 +215,7 @@ public class Order extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Cập nhật số lượng item trong giỏ hàng mỗi khi activity được resume
+        // Mỗi lần quay lại activity → cập nhật lại số lượng trong giỏ hàng
         cartBadgeManager.updateCartCount();
     }
 }
