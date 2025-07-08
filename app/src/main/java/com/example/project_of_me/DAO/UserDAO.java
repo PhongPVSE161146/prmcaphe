@@ -118,7 +118,24 @@ public class UserDAO {
         cursor.close();
         return user;
     }
-
+    public User getUserByEmail1(String email) {
+        User user = null;
+        String query = "SELECT * FROM users WHERE email=?";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        if (cursor.moveToFirst()) {
+            user = new User(
+                    cursor.getInt(0),              // id
+                    cursor.getString(1),           // username
+                    cursor.getString(3),           // email (index 3)
+                    cursor.getString(4),           // phoneNumber
+                    cursor.getString(2),           // passwordHash (index 2)
+                    cursor.getString(5),           // address
+                    cursor.getString(6)            // role
+            );
+        }
+        cursor.close();
+        return user;
+    }
 
     public boolean updateUserInfo(String email, String newName, String newPhone) {
         ContentValues values = new ContentValues();

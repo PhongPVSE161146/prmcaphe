@@ -47,7 +47,7 @@
 
     <!-- Menu item: Order History -->
     <LinearLayout
-        android:id="@+id/llOrderHistory"
+        android:id="@+id/logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -62,7 +62,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_order"
+            android:src="@drawable/ic_logout"
             />
 
         <TextView
@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Order History"
+            android:text="Log-out"
             android:textColor="#000000"
             android:textSize="16sp" />
     </LinearLayout>
@@ -86,7 +86,7 @@
         android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llOrderHistory">
+        app:layout_constraintTop_toBottomOf="@id/logout">
 
         <ImageView
             android:layout_width="24dp"
@@ -100,5 +100,7 @@
             android:text="Profile"
             android:textColor="#000000"
             android:textSize="16sp" />
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

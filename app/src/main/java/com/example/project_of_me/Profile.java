@@ -24,58 +24,69 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profile extends AppCompatActivity {
     private UserDAO user;
-    private TextView tvEditProfile, tvChangePassword, tvLogout;
+    private TextView tvEditProfile, tvChangePassword;
     private TextView tvUsername, tvEmail;
     private ImageView tvImg;
     private BottomNavigationView bottomNavigationView;
-    // Mục "Đồ uống yêu thích" đã có
+    // Mục "Món ăn yêu thích" đã có
     private TextView btnFavorites;
     // Mục "Đơn hàng của bạn"
-    private LinearLayout llPlacedOrders;
+    private LinearLayout btnLogOut,AllProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); // Gọi phương thức onCreate của lớp cha
-        setContentView(R.layout.activity_profile); // Gán layout XML tương ứng cho Activity này
-
-        user = new UserDAO(this); // Khởi tạo DAO để làm việc với dữ liệu người dùng
-        tvUsername = findViewById(R.id.tvUserName); // Gán biến hiển thị tên người dùng với ID trong layout
-
-        // Lấy dữ liệu SharedPreferences chứa thông tin đăng nhập người dùng
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
+        user = new UserDAO(this);
+        tvUsername = findViewById(R.id.tvUserName);
+        btnLogOut = findViewById(R.id.logout);
+        AllProfile = findViewById(R.id.AllProfile);
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
-        String emailPref = sharedPreferences.getString("email", null); // Lấy email đã lưu
-
-        // Nếu có email lưu trong SharedPreferences thì hiển thị thông báo chào mừng
+        String emailPref = sharedPreferences.getString("email", null);
         if (emailPref != null) {
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
-
-        // Gọi phương thức để lấy thông tin người dùng từ database và hiển thị
         getUserInfo(emailPref);
-    }
 
+        btnLogOut.setOnClickListener(v -> {
+            // Xóa dữ liệu lưu trong SharedPreferences
+            SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear(); // Hoặc editor.remove("email") nếu chỉ xóa email
+            editor.apply();
+
+            // Chuyển về màn hình đăng nhập
+            Intent intent = new Intent(Profile.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa ngăn xếp back
+            startActivity(intent);
+
+            // Kết thúc activity hiện tại
+            finish();
+        });
+
+        AllProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(Profile.this, ProfileDetail.class);
+            startActivity(intent);
+            finish();
+        });
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Kiểm tra khi Activity con trả kết quả về
         if (requestCode == 101 && resultCode == RESULT_OK) {
-            // Khi kết quả trả về thành công, tải lại thông tin người dùng
-
+            // Load lại thông tin người dùng
             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
-            String emailPref = sharedPreferences.getString("email", null); // Lấy lại email từ SharedPreferences
-
-            getUserInfo(emailPref); // Cập nhật lại thông tin hiển thị
+            String emailPref = sharedPreferences.getString("email", null);
+            getUserInfo(emailPref);
         }
     }
 
-    // Phương thức lấy thông tin người dùng từ database dựa theo email và hiển thị ra giao diện
+    // Phương thức lấy thông tin user và hiển thị
     public void getUserInfo(String email) {
-        User currentUser = user.getUserByEmail(email); // Gọi DAO để lấy thông tin người dùng dựa trên email
-
+        User currentUser = user.getUserByEmail(email);
         if (currentUser != null) {
-            tvUsername.setText(currentUser.getName()); // Nếu có dữ liệu, hiển thị tên người dùng
+            tvUsername.setText(currentUser.getName());
         } else {
-            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show(); // Báo lỗi nếu không có
+            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
         }
     }
 }
