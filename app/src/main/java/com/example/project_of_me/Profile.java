@@ -67,7 +67,7 @@ public class Profile extends AppCompatActivity {
             editor.apply(); // Áp dụng thay đổi
 
             // Chuyển người dùng về màn hình đăng nhập (MainActivity)
-            Intent intent = new Intent(Profile.this, MainActivity.class);
+            Intent intent = new Intent(Profile.this, MainActivity.class); // Tạo intent để chuyển về MainActivity
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa backstack
             startActivity(intent);
 
