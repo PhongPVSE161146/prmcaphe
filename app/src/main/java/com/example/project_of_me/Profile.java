@@ -84,24 +84,27 @@ public class Profile extends AppCompatActivity {
     }
 
     
-    @Override
+     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Nếu từ activity khác trả về với request code đúng và thành công
         if (requestCode == 101 && resultCode == RESULT_OK) {
-            // Load lại thông tin người dùng
+            // Tải lại thông tin người dùng từ SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
             String emailPref = sharedPreferences.getString("email", null);
-            getUserInfo(emailPref);
+            getUserInfo(emailPref); // Cập nhật lại hiển thị người dùng
         }
     }
 
-    // Phương thức lấy thông tin user và hiển thị
+    // Phương thức lấy thông tin người dùng từ database thông qua email
     public void getUserInfo(String email) {
-        User currentUser = user.getUserByEmail(email);
+        User currentUser = user.getUserByEmail(email); // Lấy dữ liệu người dùng từ DAO
+
         if (currentUser != null) {
-            tvUsername.setText(currentUser.getName());
+            tvUsername.setText(currentUser.getName()); // Hiển thị tên người dùng nếu có dữ liệu
         } else {
-            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show(); // Báo lỗi nếu không có
         }
     }
 }
