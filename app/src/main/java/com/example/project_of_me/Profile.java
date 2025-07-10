@@ -23,52 +23,67 @@ import com.example.project_of_me.Models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profile extends AppCompatActivity {
-    private UserDAO user;
-    private TextView tvEditProfile, tvChangePassword;
-    private TextView tvUsername, tvEmail;
-    private ImageView tvImg;
-    private BottomNavigationView bottomNavigationView;
-    // Mục "Món ăn yêu thích" đã có
+    private UserDAO user; // Đối tượng DAO để truy cập dữ liệu người dùng từ SQLite
+    private TextView tvEditProfile, tvChangePassword; // Các TextView cho sửa hồ sơ và đổi mật khẩu (chưa sử dụng)
+    private TextView tvUsername, tvEmail; // Hiển thị tên và email người dùng (tvEmail chưa dùng)
+    private ImageView tvImg; // Hình ảnh đại diện người dùng (chưa sử dụng trong code này)
+    private BottomNavigationView bottomNavigationView; // Thanh điều hướng dưới (chưa sử dụng trong code này)
+
+    // Mục "Món ăn yêu thích" đã có (btnFavorites chưa được sử dụng trong đoạn code này)
     private TextView btnFavorites;
-    // Mục "Đơn hàng của bạn"
-    private LinearLayout btnLogOut,AllProfile;
+
+    // Các LinearLayout tương tác: nút đăng xuất và xem thông tin chi tiết hồ sơ
+    private LinearLayout btnLogOut, AllProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        user = new UserDAO(this);
+        super.onCreate(savedInstanceState); // Gọi hàm onCreate của Activity cha
+        setContentView(R.layout.activity_profile); // Gán layout XML cho Activity này
+
+        user = new UserDAO(this); // Khởi tạo đối tượng DAO để lấy dữ liệu người dùng
+
+        // Ánh xạ các thành phần trong layout XML vào biến Java
         tvUsername = findViewById(R.id.tvUserName);
         btnLogOut = findViewById(R.id.logout);
         AllProfile = findViewById(R.id.AllProfile);
+
+        // Lấy thông tin email đã lưu từ SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String emailPref = sharedPreferences.getString("email", null);
+
+        // Nếu có email, hiển thị lời chào và lấy thông tin người dùng từ CSDL
         if (emailPref != null) {
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
-        getUserInfo(emailPref);
 
+        getUserInfo(emailPref); // Gọi phương thức hiển thị thông tin người dùng
+
+        // Xử lý sự kiện click vào nút đăng xuất
         btnLogOut.setOnClickListener(v -> {
-            // Xóa dữ liệu lưu trong SharedPreferences
+            // Xóa thông tin lưu trữ (email) trong SharedPreferences
             SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
-            editor.clear(); // Hoặc editor.remove("email") nếu chỉ xóa email
-            editor.apply();
+            editor.clear(); // Xóa toàn bộ dữ liệu đã lưu (hoặc dùng editor.remove("email") để xóa riêng email)
+            editor.apply(); // Áp dụng thay đổi
 
-            // Chuyển về màn hình đăng nhập
+            // Chuyển người dùng về màn hình đăng nhập (MainActivity)
             Intent intent = new Intent(Profile.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa ngăn xếp back
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa backstack
             startActivity(intent);
 
-            // Kết thúc activity hiện tại
+            // Kết thúc Profile activity
             finish();
         });
 
+        // Xử lý sự kiện click vào "AllProfile" để xem thông tin chi tiết người dùng
         AllProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(Profile.this, ProfileDetail.class);
-            startActivity(intent);
-            finish();
+            Intent intent = new Intent(Profile.this, ProfileDetail.class); // Tạo intent để chuyển sang ProfileDetail
+            startActivity(intent); // Bắt đầu activity mới
+            finish(); // Kết thúc Profile activity hiện tại
         });
     }
+
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
