@@ -45,36 +45,42 @@ public class MainActivity extends AppCompatActivity {
         TextView tv_forgot_password = findViewById(R.id.tvForgotPassword);
         TextView tv_sign_up = findViewById(R.id.tvRegister);
 
+         // Xử lý sự kiện khi bấm nút "Đăng nhập"
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = value_email.getText().toString().trim();
                 String password = value_password.getText().toString().trim();
 
+                // Kiểm tra dữ liệu đầu vào
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Hash password trước khi kiểm tra
+                // Mã hoá mật khẩu trước khi kiểm tra
                 String hashedPassword = PasswordHasher.hashPassword(password);
                 if (hashedPassword == null) {
                     Toast.makeText(MainActivity.this, "Lỗi khi mã hóa mật khẩu", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                // Kiểm tra người dùng có tồn tại không
                 boolean exist_user = user.checkUser(email, hashedPassword);
                 if (exist_user) {
+                    // Lưu email vào SharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", email);
                     editor.apply();
-                    
-                    // Kiểm tra role để chuyển hướng
+
+                    // Lấy thông tin người dùng và kiểm tra quyền
                     User currentUser = user.getUserByEmail(email);
                     if (currentUser != null && "admin".equals(currentUser.getRole())) {
                         Toast.makeText(MainActivity.this, "Đăng nhập thành công với quyền admin", Toast.LENGTH_SHORT).show();
+                        // Có thể mở trang AdminActivity nếu cần
                     } else {
+                        // Mở trang chính cho user
                         Intent intent = new Intent(MainActivity.this, Home.class);
                         startActivity(intent);
                         Toast.makeText(MainActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
@@ -84,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         // Sign up
         tv_sign_up.setOnClickListener(new View.OnClickListener() {
