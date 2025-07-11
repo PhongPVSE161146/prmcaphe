@@ -42,15 +42,17 @@ public class ProfileDetail extends AppCompatActivity {
     }
 
     private void loadUserData(String email) {
-        User user = userDAO.getUserByEmail1(email);
+        User user = userDAO.getUserByEmail1(email); // Truy vấn người dùng bằng DAO
+
+        // Nếu truy vấn thành công, hiển thị dữ liệu lên giao diện
         if (user != null) {
-            tvUsername.setText(user.getName());
-            tvEmail.setText(user.getEmail());
-            tvPhoneNumber.setText(user.getPhone());
-            tvAddress.setText(user.getAddress());
-            tvRole.setText(user.getRole());
+            tvUsername.setText(user.getName()); // Hiển thị tên người dùng
+            tvEmail.setText(user.getEmail()); // Hiển thị email
+            tvPhoneNumber.setText(user.getPhone()); // Hiển thị số điện thoại
+            tvAddress.setText(user.getAddress()); // Hiển thị địa chỉ
+            tvRole.setText(user.getRole()); // Hiển thị vai trò (role) người dùng
         } else {
-            Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show(); // Hiển thị thông báo nếu không có dữ liệu
         }
     }
 }
