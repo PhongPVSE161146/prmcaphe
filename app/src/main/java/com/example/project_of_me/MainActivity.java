@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Xử lý kết quả sau khi yêu cầu quyền
     @Override
+    //overide
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == NOTIFICATION_PERMISSION_CODE) {
