@@ -34,7 +34,7 @@ public class Profile extends AppCompatActivity {
 
     // Mục "Đơn hàng của bạn"
     private LinearLayout llPlacedOrders;
-
+//tạo profile
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
