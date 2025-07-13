@@ -39,7 +39,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#4A8460"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp" /> <!-- Hiệu ứng đổ bóng (chỉ có ở API 21 trở lên) -->
 
         <!-- Username -->
         <EditText
@@ -50,7 +50,7 @@
             android:layout_marginTop="16dp"
             android:padding="10dp"
             android:background="@android:drawable/editbox_background_normal"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName" /> <!-- Hiệu ứng đổ bóng (chỉ có ở API 21 trở lên) -->
 
         <!-- Email -->
         <EditText
@@ -66,13 +66,13 @@
         <!-- Password -->
         <EditText
             android:id="@+id/etPassword"
-            android:layout_width="match_parent"
+            android:layout_width="match_parent"    
             android:layout_height="wrap_content"
             android:hint="Enter password"
             android:layout_marginTop="8dp"
             android:padding="10dp"
             android:background="@android:drawable/editbox_background_normal"
-            android:inputType="textPassword" />
+            android:inputType="textPassword" />     <!-- Hiệu ứng đổ bóng (chỉ có ở API 21 trở lên) -->
 
         <!-- Repeat Password -->
         <EditText

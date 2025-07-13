@@ -8,8 +8,11 @@ public class Order {
     private String orderStatus;
 
     public Order(int orderId, int userId, double totalPrice, String orderDate, String orderStatus) {
-        this.orderId = orderId;
-        this.userId = userId;
+        this.orderId = orderId; // ID của đơn hàng
+
+
+        this.userId = userId; // ID của người dùng sở hữu đơn hàng
+        // Tổng giá trị của đơn hàng
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;

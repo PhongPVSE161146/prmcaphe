@@ -18,7 +18,7 @@ public class CartDAO {
 
     // tạo constructor để kết nối với database
     public CartDAO(Context context) {
-        dbHelper = new ConnectDB(context);
+        dbHelper = new ConnectDB(context); // khởi tạo ConnectDB để kết nối với database
     }
 
     // lấy database để ghi

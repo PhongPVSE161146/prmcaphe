@@ -16,14 +16,14 @@
         android:orientation="horizontal"
         android:padding="16dp"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"> <!-- Header Layout -->
 
         <ImageView
             android:id="@+id/imgUser"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_user"
-            android:contentDescription="Profile" />
+            android:src="@drawable/ic_user" 
+            android:contentDescription="Profile" /> <!-- Icon for user profile -->
 
         <TextView
             android:id="@+id/tvTitle"
@@ -34,7 +34,7 @@
             android:text="Coffee Shop"
             android:textColor="#4A8460"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" /> <!-- Title of the app -->
 
         <ImageView
             android:id="@+id/imgCart"

@@ -43,9 +43,36 @@ public class Profile extends AppCompatActivity {
         if (emailPref != null) {
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
-        getUserInfo(emailPref);
+
+        getUserInfo(emailPref); // Gọi phương thức hiển thị thông tin người dùng
+
+        // Xử lý sự kiện click vào nút đăng xuất
+        btnLogOut.setOnClickListener(v -> {
+            // Xóa thông tin lưu trữ (email) trong SharedPreferences
+            SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear(); // Xóa toàn bộ dữ liệu đã lưu (hoặc dùng editor.remove("email") để xóa riêng email)
+            editor.apply(); // Áp dụng thay đổi
+
+            // Chuyển người dùng về màn hình đăng nhập (MainActivity)
+            Intent intent = new Intent(Profile.this, MainActivity.class); // Tạo intent để chuyển về MainActivity
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa backstack
+            startActivity(intent);
+
+            // Kết thúc Profile activity
+            finish();
+        });
+
+        // Xử lý sự kiện click vào "AllProfile" để xem thông tin chi tiết người dùng
+        AllProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(Profile.this, ProfileDetail.class); // Tạo intent để chuyển sang ProfileDetail
+            startActivity(intent); // Bắt đầu activity mới
+            finish(); // Kết thúc Profile activity hiện tại
+        });
     }
-    @Override
+
+    
+     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && resultCode == RESULT_OK) {
