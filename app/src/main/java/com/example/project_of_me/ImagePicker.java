@@ -11,6 +11,7 @@ public class ImagePicker {
     public static final int CAMERA_REQUEST_CODE = 2; // Mã request để chụp ảnh từ camera
 
     // Hàm mở thư viện để chọn ảnh từ bộ nhớ thiết bị
+    //chọn ảnh
     public static void chooseImage(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); // Gọi intent chọn ảnh
         intent.setType("image/*"); // Chỉ chọn các file là ảnh
