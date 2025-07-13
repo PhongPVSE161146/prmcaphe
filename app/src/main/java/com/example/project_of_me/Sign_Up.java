@@ -101,7 +101,7 @@ public class Sign_Up extends AppCompatActivity {
         return BitmapFactory.decodeResource(context.getResources(), drawableId);
     }
 
-    // Hàm chuyển ảnh bitmap thành mảng byte để lưu vào database
+    // Hàm chuyển ảnh bitmap thành mảng byte để lưu vào databasee
     private byte[] bitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream); // Nén ảnh ở chất lượng 100%
