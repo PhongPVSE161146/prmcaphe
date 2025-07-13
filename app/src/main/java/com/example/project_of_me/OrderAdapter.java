@@ -11,16 +11,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.project_of_me.Utils.CartBadgeManager;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.project_of_me.DAO.CartDAO;
 import com.example.project_of_me.Models.CartItemDetail;
 import com.example.project_of_me.Models.Coffee;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,7 +59,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         CartItemDetail item = orderItemList.get(position);
         holder.foodName.setText(item.getFoodName());
         holder.foodDescription.setText(item.getFoodDescription());
-
+        
         // Sử dụng số lượng tạm thời từ tempQuantities, nếu không có thì dùng số lượng từ item
         Integer currentQuantity = tempQuantities.get(position);
         if (currentQuantity == null) {
@@ -91,8 +87,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 if (isChecked) {
                     selectedPositions.add(adapterPosition);
                     // Khi tick chọn, cập nhật số lượng vào database
-                    updateQuantityInDatabase(item.getOrderItemId(),
-                            tempQuantities.get(adapterPosition));
+                    updateQuantityInDatabase(item.getOrderItemId(), 
+                                          tempQuantities.get(adapterPosition));
                 } else {
                     selectedPositions.remove(adapterPosition);
                 }
@@ -106,14 +102,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 int newQuantity = tempQuantities.get(adapterPosition) + 1;
                 tempQuantities.put(adapterPosition, newQuantity);
-
+                
                 // Cập nhật UI
                 holder.tvQuantity.setText(String.valueOf(newQuantity));
                 holder.foodPrice.setText(String.format("%,.0f₫ x %d", item.getPrice(), newQuantity));
+                
                 // Nếu item đang được chọn, cập nhật tổng tiền
-                updateTotalPrice();
-                updateQuantityInDatabase(item.getOrderItemId(), newQuantity);
-                // Cập nhật vào database nếu đang được chọn
+                if (selectedPositions.contains(adapterPosition)) {
+                    updateTotalPrice();
+                    // Cập nhật vào database nếu đang được chọn
+                    updateQuantityInDatabase(item.getOrderItemId(), newQuantity);
+                }
             }
         });
 
@@ -125,12 +124,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 if (currentQty > 1) {
                     int newQuantity = currentQty - 1;
                     tempQuantities.put(adapterPosition, newQuantity);
-
+                    
                     // Cập nhật UI
                     holder.tvQuantity.setText(String.valueOf(newQuantity));
                     holder.foodPrice.setText(String.format("%,.0f₫ x %d", item.getPrice(), newQuantity));
-                    updateTotalPrice();
-                    updateQuantityInDatabase(item.getOrderItemId(), newQuantity);
+                    
+                    // Nếu item đang được chọn, cập nhật tổng tiền
+                    if (selectedPositions.contains(adapterPosition)) {
+                        updateTotalPrice();
+                        // Cập nhật vào database nếu đang được chọn
+                        updateQuantityInDatabase(item.getOrderItemId(), newQuantity);
+                    }
                 } else {
                     Toast.makeText(context, "Số lượng tối thiểu là 1", Toast.LENGTH_SHORT).show();
                 }
@@ -146,7 +150,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     Toast.makeText(context, "Đã xóa sản phẩm khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
                     orderItemList.remove(adapterPosition);
                     selectedPositions.remove(adapterPosition);
-
+                    
                     // Cập nhật lại tempQuantities cho các item còn lại
                     Map<Integer, Integer> newTempQuantities = new HashMap<>();
                     for (int i = 0; i < orderItemList.size(); i++) {
@@ -154,11 +158,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     }
                     tempQuantities.clear();
                     tempQuantities.putAll(newTempQuantities);
-
+                    
                     notifyItemRemoved(adapterPosition);
                     notifyItemRangeChanged(adapterPosition, orderItemList.size());
                     updateTotalPrice();
-
+                    
                     // Cập nhật badge giỏ hàng
                     CartBadgeManager.getInstance(context, null).updateCartCount();
                 } else {

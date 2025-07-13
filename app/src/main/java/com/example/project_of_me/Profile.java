@@ -23,35 +23,23 @@ import com.example.project_of_me.Models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profile extends AppCompatActivity {
-    private UserDAO user; // Đối tượng DAO để truy cập dữ liệu người dùng từ SQLite
-    private TextView tvEditProfile, tvChangePassword; // Các TextView cho sửa hồ sơ và đổi mật khẩu (chưa sử dụng)
-    private TextView tvUsername, tvEmail; // Hiển thị tên và email người dùng (tvEmail chưa dùng)
-    private ImageView tvImg; // Hình ảnh đại diện người dùng (chưa sử dụng trong code này)
-    private BottomNavigationView bottomNavigationView; // Thanh điều hướng dưới (chưa sử dụng trong code này)
-
-    // Mục "Món ăn yêu thích" đã có (btnFavorites chưa được sử dụng trong đoạn code này)
+    private UserDAO user;
+    private TextView tvEditProfile, tvChangePassword, tvLogout;
+    private TextView tvUsername, tvEmail;
+    private ImageView tvImg;
+    private BottomNavigationView bottomNavigationView;
+    // Mục "Món ăn yêu thích" đã có
     private TextView btnFavorites;
-
-    // Các LinearLayout tương tác: nút đăng xuất và xem thông tin chi tiết hồ sơ
-    private LinearLayout btnLogOut, AllProfile;
-
+    // Mục "Đơn hàng của bạn"
+    private LinearLayout llPlacedOrders;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); // Gọi hàm onCreate của Activity cha
-        setContentView(R.layout.activity_profile); // Gán layout XML cho Activity này
-
-        user = new UserDAO(this); // Khởi tạo đối tượng DAO để lấy dữ liệu người dùng
-
-        // Ánh xạ các thành phần trong layout XML vào biến Java
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
+        user = new UserDAO(this);
         tvUsername = findViewById(R.id.tvUserName);
-        btnLogOut = findViewById(R.id.logout);
-        AllProfile = findViewById(R.id.AllProfile);
-
-        // Lấy thông tin email đã lưu từ SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String emailPref = sharedPreferences.getString("email", null);
-
-        // Nếu có email, hiển thị lời chào và lấy thông tin người dùng từ CSDL
         if (emailPref != null) {
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
@@ -87,24 +75,21 @@ public class Profile extends AppCompatActivity {
      @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Nếu từ activity khác trả về với request code đúng và thành công
         if (requestCode == 101 && resultCode == RESULT_OK) {
-            // Tải lại thông tin người dùng từ SharedPreferences
+            // Load lại thông tin người dùng
             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
             String emailPref = sharedPreferences.getString("email", null);
-            getUserInfo(emailPref); // Cập nhật lại hiển thị người dùng
+            getUserInfo(emailPref);
         }
     }
 
-    // Phương thức lấy thông tin người dùng từ database thông qua email
+    // Phương thức lấy thông tin user và hiển thị
     public void getUserInfo(String email) {
-        User currentUser = user.getUserByEmail(email); // Lấy dữ liệu người dùng từ DAO
-
+        User currentUser = user.getUserByEmail(email);
         if (currentUser != null) {
-            tvUsername.setText(currentUser.getName()); // Hiển thị tên người dùng nếu có dữ liệu
+            tvUsername.setText(currentUser.getName());
         } else {
-            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show(); // Báo lỗi nếu không có
+            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
         }
     }
 }
