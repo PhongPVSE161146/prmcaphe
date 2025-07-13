@@ -63,11 +63,11 @@ public class Order extends AppCompatActivity {
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
 //        orderAdapter = new OrderAdapter(Order.this, orderItemList, tvTotalPrice);
         rvOrderItems.setLayoutManager(new LinearLayoutManager(this));
-
+        
         // Khởi tạo các danh sách
         orderItemList = new ArrayList<>();
         cartItemList = new ArrayList<>();
-
+        
         orderDAO = new OrderDAO(this);
         cartDAO = new CartDAO(this);
 
@@ -130,7 +130,7 @@ public class Order extends AppCompatActivity {
 
                     // Sử dụng CartDAO.checkoutCart() để đặt hàng
                     int orderId = cartDAO.checkoutCart(userId, "Cash", ""); // Mặc định thanh toán tiền mặt và không có địa chỉ
-
+                    
                     if (orderId != -1) {
                         // Chuyển sang OrderSuccessActivity, truyền tổng tiền và orderId
                         Intent intent = new Intent(Order.this, OrderSuccessActivity.class);
