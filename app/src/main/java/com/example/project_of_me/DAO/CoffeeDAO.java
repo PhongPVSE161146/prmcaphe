@@ -154,6 +154,39 @@ public class CoffeeDAO {
         return null; // Không tìm thấy món ăn
     }
 
+//    public boolean updateFood(Coffee food) {
+//        db = dbHelper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put("name", food.getName());
+//        values.put("description", food.getDescription());
+//        values.put("price", food.getPrice());
+//        values.put("image_url", food.getImage_url());
+//        values.put("status", food.getStatus());
+//
+//        int result = db.update("foods", values, "id = ?", new String[]{String.valueOf(food.getId())});
+//        db.close();
+//
+//        if (result == 0) {
+//            Log.e("FoodDAO", "Update food failed");
+//            return false;
+//        } else {
+//            Log.d("FoodDAO", "Update food successful");
+//            return true;
+//        }
+//    }
+//    public boolean deleteFood(int id) {
+//        db = dbHelper.getWritableDatabase();
+//        int result = db.delete("foods", "id = ?", new String[]{String.valueOf(id)});
+//        db.close();
+//
+//        if (result == 0) {
+//            Log.e("FoodDAO", "Delete food failed");
+//            return false;
+//        } else {
+//            Log.d("FoodDAO", "Delete food successful");
+//            return true;
+//        }
+//    }
 
 
 }

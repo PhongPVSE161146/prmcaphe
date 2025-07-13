@@ -49,7 +49,6 @@ public class Home extends AppCompatActivity {
     private TextView tvCartCount;
     private CartBadgeManager cartBadgeManager;
 
-    //tạo sản phẩm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -320,6 +319,3 @@ public class Home extends AppCompatActivity {
         }
     }
 }
-
-
-

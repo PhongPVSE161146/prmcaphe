@@ -24,26 +24,50 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Profile extends AppCompatActivity {
     private UserDAO user;
-    private TextView tvEditProfile, tvChangePassword, tvLogout;
+    private TextView tvEditProfile, tvChangePassword;
     private TextView tvUsername, tvEmail;
     private ImageView tvImg;
     private BottomNavigationView bottomNavigationView;
     // Mục "Món ăn yêu thích" đã có
     private TextView btnFavorites;
     // Mục "Đơn hàng của bạn"
-    private LinearLayout llPlacedOrders;
+    private LinearLayout btnLogOut,AllProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         user = new UserDAO(this);
         tvUsername = findViewById(R.id.tvUserName);
+        btnLogOut = findViewById(R.id.logout);
+        AllProfile = findViewById(R.id.AllProfile);
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String emailPref = sharedPreferences.getString("email", null);
         if (emailPref != null) {
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
         getUserInfo(emailPref);
+
+        btnLogOut.setOnClickListener(v -> {
+            // Xóa dữ liệu lưu trong SharedPreferences
+            SharedPreferences preferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear(); // Hoặc editor.remove("email") nếu chỉ xóa email
+            editor.apply();
+
+            // Chuyển về màn hình đăng nhập
+            Intent intent = new Intent(Profile.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa ngăn xếp back
+            startActivity(intent);
+
+            // Kết thúc activity hiện tại
+            finish();
+        });
+
+        AllProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(Profile.this, ProfileDetail.class);
+            startActivity(intent);
+            finish();
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

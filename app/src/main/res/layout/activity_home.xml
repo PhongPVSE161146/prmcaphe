@@ -43,6 +43,7 @@
                     android:id="@+id/tvTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="180px"
                     android:layout_weight="2"
                     android:gravity="center"
                     android:text="Coffee Shop"
@@ -58,38 +59,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
-
-            <!-- Search Bar -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="12dp">
-
-                    <ImageView
-                        android:id="@+id/imgSearch"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search" />
-
-                    <EditText
-                        android:id="@+id/etSearch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:hint="Search your drink"
-                        android:paddingStart="8dp"
-                        android:textColor="#000" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
             <!-- Popular Drink Horizontal -->
             <LinearLayout
