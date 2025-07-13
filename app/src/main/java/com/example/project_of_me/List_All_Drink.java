@@ -1,5 +1,6 @@
 package com.example.project_of_me;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +33,7 @@ public class List_All_Drink extends AppCompatActivity {
     private EditText etSearch;
     private TextView tvSeeAll, tvSeeAll1, tvSeeAll2;
     private List<Coffee> listCoffee;
-    private ImageView imgCart, imgUser;
+    private ImageView imgCart, imgUser, imgBanner;
     private TextView tvTitle;
     private Button btnFilterAll, btnFilterUnder50k, btnFilter50kTo100k, btnFilterOver100k;
     private List<Coffee> originalList;
@@ -49,6 +50,7 @@ public class List_All_Drink extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         imgCart = findViewById(R.id.imgCart);
         imgUser = findViewById(R.id.imgUser);
+        imgBanner = findViewById(R.id.imgBanner); // Gán ID banner
         tvTitle = findViewById(R.id.tvTitle);
         etSearch = findViewById(R.id.etSearch);
         btnFilterAll = findViewById(R.id.btnFilterAll);
@@ -64,7 +66,7 @@ public class List_All_Drink extends AppCompatActivity {
 
         // Thiết lập search
         setupSearch();
-        
+
         // Thiết lập filter
         setupFilters();
 
@@ -92,6 +94,18 @@ public class List_All_Drink extends AppCompatActivity {
                 startActivity(intent);
                 Toast.makeText(List_All_Drink.this, "Quantity increased", Toast.LENGTH_SHORT).show();
             }
+        });
+        // 👉 Sự kiện nhấn vào Banner để mở Google Maps
+        imgBanner.setOnClickListener(v -> {
+            // Dùng geo URI nếu muốn chính xác vị trí
+//    String geoUri = "geo:0,0?q=Trường+Đại+Học+FPT";
+//    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+//    intent.setPackage("com.google.android.apps.maps");
+
+            // Cách an toàn hơn (dùng đường dẫn web của Google Maps)
+            String mapUrl = "https://www.google.com/maps/search/?api=1&query=Trường+Đại+Học+FPT";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
+            startActivity(intent);
         });
     }
 
@@ -196,3 +210,5 @@ public class List_All_Drink extends AppCompatActivity {
         applyFilters();
     }
 }
+
+
