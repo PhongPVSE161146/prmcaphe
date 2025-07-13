@@ -21,6 +21,8 @@ import com.example.project_of_me.DAO.OrderDAO;
 import com.example.project_of_me.DAO.UserDAO;
 import com.example.project_of_me.Models.CartItemDetail;
 import com.example.project_of_me.Models.OrderItem;
+import com.example.project_of_me.Models.CartItem;
+
 import com.example.project_of_me.Models.User;
 
 import java.util.ArrayList;
@@ -57,15 +59,15 @@ public class Order extends AppCompatActivity {
         imgCart = findViewById(R.id.imgCart);
         tvTitle = findViewById(R.id.tvTitle);
         imgUser = findViewById(R.id.imgUser);
-        btnOrder = findViewById(R.id.btnOrder);
+       btnOrder = findViewById(R.id.btnOrder);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
 //        orderAdapter = new OrderAdapter(Order.this, orderItemList, tvTotalPrice);
         rvOrderItems.setLayoutManager(new LinearLayoutManager(this));
-
+        
         // Khởi tạo các danh sách
         orderItemList = new ArrayList<>();
         cartItemList = new ArrayList<>();
-
+        
         orderDAO = new OrderDAO(this);
         cartDAO = new CartDAO(this);
 
@@ -90,22 +92,22 @@ public class Order extends AppCompatActivity {
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
-            List<CartItemDetail> items = cartDAO.getCartItems(userId);
-            if (items != null && !items.isEmpty()) {
-                cartItemList.clear();
-                cartItemList.addAll(items);
-            }
-            handler.post(() -> {
-                if (cartItemList.isEmpty()) {
-                    tvEmptyCart.setVisibility(View.VISIBLE);
-                    rvOrderItems.setVisibility(View.GONE);
-                } else {
-                    tvEmptyCart.setVisibility(View.GONE);
-                    rvOrderItems.setVisibility(View.VISIBLE);
-                    orderAdapter = new OrderAdapter(Order.this, cartItemList, tvTotalPrice);
-                    rvOrderItems.setAdapter(orderAdapter);
+                List<CartItemDetail> items = cartDAO.getCartItems(userId);
+                if (items != null && !items.isEmpty()) {
+                    cartItemList.clear();
+                    cartItemList.addAll(items);
                 }
-            });
+                handler.post(() -> {
+                    if (cartItemList.isEmpty()) {
+                        tvEmptyCart.setVisibility(View.VISIBLE);
+                        rvOrderItems.setVisibility(View.GONE);
+                    } else {
+                        tvEmptyCart.setVisibility(View.GONE);
+                        rvOrderItems.setVisibility(View.VISIBLE);
+                        orderAdapter = new OrderAdapter(Order.this, cartItemList, tvTotalPrice);
+                        rvOrderItems.setAdapter(orderAdapter);
+                    }
+                });
         });
 
         // Xử lý sự kiện click nút "Đặt hàng"
@@ -128,7 +130,7 @@ public class Order extends AppCompatActivity {
 
                     // Sử dụng CartDAO.checkoutCart() để đặt hàng
                     int orderId = cartDAO.checkoutCart(userId, "Cash", ""); // Mặc định thanh toán tiền mặt và không có địa chỉ
-
+                    
                     if (orderId != -1) {
                         // Chuyển sang OrderSuccessActivity, truyền tổng tiền và orderId
                         Intent intent = new Intent(Order.this, OrderSuccessActivity.class);

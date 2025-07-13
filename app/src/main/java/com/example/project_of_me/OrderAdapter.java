@@ -25,24 +25,22 @@ import java.util.Map;
 import java.util.Set;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
-    // Adapter cho danh sách sản phẩm trong giỏ hàng (order screen)
-
     private Context context;
-    private List<CartItemDetail> orderItemList; // Danh sách sản phẩm trong giỏ hàng
-    private Set<Integer> selectedPositions = new HashSet<>(); // Vị trí các sản phẩm được tick chọn
+    private List<CartItemDetail> orderItemList;
+    // Sử dụng Set để lưu vị trí các item được tick chọn
+    private Set<Integer> selectedPositions = new HashSet<>();
     private Coffee food;
-    private TextView tvTotalPrice; // TextView hiển thị tổng tiền
-    private CartDAO cartDAO; // DAO để thao tác với giỏ hàng
-    private Map<Integer, Integer> tempQuantities = new HashMap<>(); // Lưu số lượng tạm thời từng item
+    private TextView tvTotalPrice;  // Add this reference
+    private CartDAO cartDAO;
+    // Thêm Map để lưu số lượng tạm thời
+    private Map<Integer, Integer> tempQuantities = new HashMap<>();
 
     public OrderAdapter(Context context, List<CartItemDetail> orderItemList, TextView tvTotalPrice) {
-        // Constructor: truyền context, danh sách item và TextView tổng tiền
         this.context = context;
         this.orderItemList = orderItemList;
         this.tvTotalPrice = tvTotalPrice;
         this.cartDAO = new CartDAO(context);
-
-        // Khởi tạo số lượng tạm thời ban đầu
+        // Khởi tạo tempQuantities với số lượng hiện tại
         for (int i = 0; i < orderItemList.size(); i++) {
             tempQuantities.put(i, orderItemList.get(i).getQuantity());
         }
@@ -51,31 +49,27 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @NonNull
     @Override
     public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Tạo ViewHolder cho từng item trong danh sách
+        // Inflate layout dành riêng cho order item (item_order.xml)
         View view = LayoutInflater.from(context).inflate(R.layout.item_order, parent, false);
         return new OrderViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
-        // Gán dữ liệu cho từng item
         CartItemDetail item = orderItemList.get(position);
-
         holder.foodName.setText(item.getFoodName());
         holder.foodDescription.setText(item.getFoodDescription());
-
-        // Lấy số lượng tạm thời từ map
+        
+        // Sử dụng số lượng tạm thời từ tempQuantities, nếu không có thì dùng số lượng từ item
         Integer currentQuantity = tempQuantities.get(position);
         if (currentQuantity == null) {
             currentQuantity = item.getQuantity();
             tempQuantities.put(position, currentQuantity);
         }
-
-        // Hiển thị số lượng và giá
         holder.tvQuantity.setText(String.valueOf(currentQuantity));
         holder.foodPrice.setText(String.format("%,.0f₫ x %d", item.getPrice(), currentQuantity));
 
-        // Hiển thị ảnh sản phẩm
+        // Load hình ảnh
         String imagePath = item.getFoodImage();
         Bitmap bitmap = getBitmapFromFile(imagePath);
         if (bitmap != null) {
@@ -84,15 +78,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.foodImg.setImageResource(R.drawable.ic_login);
         }
 
-        // Thiết lập CheckBox cho từng item
-        holder.cbSelect.setOnCheckedChangeListener(null); // Tránh bị reset lại khi scroll
+        // Xử lý CheckBox
+        holder.cbSelect.setOnCheckedChangeListener(null);
         holder.cbSelect.setChecked(selectedPositions.contains(holder.getAdapterPosition()));
         holder.cbSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 if (isChecked) {
                     selectedPositions.add(adapterPosition);
-                    updateQuantityInDatabase(item.getOrderItemId(), tempQuantities.get(adapterPosition));
+                    // Khi tick chọn, cập nhật số lượng vào database
+                    updateQuantityInDatabase(item.getOrderItemId(), 
+                                          tempQuantities.get(adapterPosition));
                 } else {
                     selectedPositions.remove(adapterPosition);
                 }
@@ -106,12 +102,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 int newQuantity = tempQuantities.get(adapterPosition) + 1;
                 tempQuantities.put(adapterPosition, newQuantity);
-
+                
+                // Cập nhật UI
                 holder.tvQuantity.setText(String.valueOf(newQuantity));
                 holder.foodPrice.setText(String.format("%,.0f₫ x %d", item.getPrice(), newQuantity));
-
+                
+                // Nếu item đang được chọn, cập nhật tổng tiền
                 if (selectedPositions.contains(adapterPosition)) {
                     updateTotalPrice();
+                    // Cập nhật vào database nếu đang được chọn
                     updateQuantityInDatabase(item.getOrderItemId(), newQuantity);
                 }
             }
@@ -125,12 +124,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 if (currentQty > 1) {
                     int newQuantity = currentQty - 1;
                     tempQuantities.put(adapterPosition, newQuantity);
-
+                    
+                    // Cập nhật UI
                     holder.tvQuantity.setText(String.valueOf(newQuantity));
                     holder.foodPrice.setText(String.format("%,.0f₫ x %d", item.getPrice(), newQuantity));
-
+                    
+                    // Nếu item đang được chọn, cập nhật tổng tiền
                     if (selectedPositions.contains(adapterPosition)) {
                         updateTotalPrice();
+                        // Cập nhật vào database nếu đang được chọn
                         updateQuantityInDatabase(item.getOrderItemId(), newQuantity);
                     }
                 } else {
@@ -139,7 +141,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
         });
 
-        // Xử lý nút xóa sản phẩm khỏi giỏ hàng
+        // Xử lý nút xóa
         holder.btnDelete.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -148,19 +150,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     Toast.makeText(context, "Đã xóa sản phẩm khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
                     orderItemList.remove(adapterPosition);
                     selectedPositions.remove(adapterPosition);
-
-                    // Reset lại số lượng tạm thời
+                    
+                    // Cập nhật lại tempQuantities cho các item còn lại
                     Map<Integer, Integer> newTempQuantities = new HashMap<>();
                     for (int i = 0; i < orderItemList.size(); i++) {
                         newTempQuantities.put(i, orderItemList.get(i).getQuantity());
                     }
                     tempQuantities.clear();
                     tempQuantities.putAll(newTempQuantities);
-
+                    
                     notifyItemRemoved(adapterPosition);
                     notifyItemRangeChanged(adapterPosition, orderItemList.size());
                     updateTotalPrice();
-
+                    
+                    // Cập nhật badge giỏ hàng
                     CartBadgeManager.getInstance(context, null).updateCartCount();
                 } else {
                     Toast.makeText(context, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
@@ -171,11 +174,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     @Override
     public int getItemCount() {
-        // Trả về tổng số sản phẩm trong giỏ hàng
         return orderItemList.size();
     }
 
-    // Trả về danh sách sản phẩm được tick chọn
+    // Phương thức trả về danh sách OrderItemDetail được tick chọn
     public List<CartItemDetail> getSelectedItems() {
         List<CartItemDetail> selectedItems = new ArrayList<>();
         for (Integer pos : selectedPositions) {
@@ -184,7 +186,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         return selectedItems;
     }
 
-    // ViewHolder đại diện cho từng item trong RecyclerView
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
         public TextView foodName, foodDescription, foodPrice, tvQuantity;
         public ImageView foodImg;
@@ -205,19 +206,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
     }
 
-    // Cập nhật tổng tiền của các sản phẩm đã chọn
     private void updateTotalPrice() {
         double totalPrice = 0;
         for (Integer pos : selectedPositions) {
             CartItemDetail item = orderItemList.get(pos);
+            // Sử dụng số lượng tạm thời để tính tổng tiền
             totalPrice += item.getPrice() * tempQuantities.get(pos);
         }
+
         if (tvTotalPrice != null) {
             tvTotalPrice.setText(String.format("%,.0f₫", totalPrice));
         }
     }
 
-    // Cập nhật số lượng sản phẩm vào database
+    // Phương thức cập nhật số lượng vào database
     private void updateQuantityInDatabase(int orderItemId, int newQuantity) {
         boolean updated = cartDAO.updateQuantity(orderItemId, newQuantity);
         if (!updated) {
@@ -225,12 +227,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
     }
 
-    // Trả về số lượng hiện tại của một sản phẩm
+    // Phương thức để lấy số lượng hiện tại của một item
     public int getCurrentQuantity(int position) {
         return tempQuantities.getOrDefault(position, 1);
     }
 
-    // Đọc ảnh từ đường dẫn file để hiển thị
     private Bitmap getBitmapFromFile(String imagePath) {
         return BitmapFactory.decodeFile(imagePath);
     }

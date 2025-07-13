@@ -9,6 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import com.example.project_of_me.DAO.UserDAO;
 import com.example.project_of_me.DAO.CartDAO;
@@ -66,14 +69,10 @@ public class OrderSuccessActivity extends AppCompatActivity {
         // Hiển thị thông tin đơn hàng
         tvTotalAmount.setText(String.format("Tổng tiền: %,.0f₫", totalAmount));
         tvSuccessMessage.setText("Đặt hàng thành công!");
-        if (orderId != -1) {
-//            tvOrderId.setText("Mã đơn hàng: #" + orderId);
-            // Lấy thông tin đơn hàng từ database
-            Cart order = cartDAO.getOrderById(orderId);
-            if (order != null) {
-                tvOrderDate.setText("Ngày đặt: " + order.getCreatedAt());
-            }
-        }
+// Luôn hiển thị ngày hiện tại
+        String currentDate = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault()).format(new java.util.Date());
+        tvOrderDate.setText("Ngày đặt: " + currentDate);
+
 
         // Xử lý sự kiện click nút "Trở về trang chủ"
         btnBackToHome.setOnClickListener(v -> {

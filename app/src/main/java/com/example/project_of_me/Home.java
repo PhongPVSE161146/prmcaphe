@@ -3,6 +3,7 @@ package com.example.project_of_me;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,7 +44,7 @@ public class Home extends AppCompatActivity {
     private TextView tvSeeAll, tvSeeAll1, tvSeeAll2;
     private List<Coffee> listCoffeeHot;
     private List<Coffee> listCoffeeCold;
-    private ImageView imgCart, imgUser;
+    private ImageView imgCart, imgUser, imgBanner;
     private TextView tvTitle;
     private TextView tvCartCount;
     private CartBadgeManager cartBadgeManager;
@@ -67,6 +68,7 @@ public class Home extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         coffeeDAO = new CoffeeDAO(this);
         etSearch = findViewById(R.id.etSearch);
+        imgBanner = findViewById(R.id.imgBanner); // Gán ID banner
 //        insertSampleFoods(); // Nếu cần insert mẫu
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String userEmail = sharedPreferences.getString("email", ""); // Email mặc định là ""
@@ -128,6 +130,19 @@ public class Home extends AppCompatActivity {
                 startActivity(intent);
                 Toast.makeText(Home.this, "Quantity increased", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        // 👉 Sự kiện nhấn vào Banner để mở Google Maps
+        imgBanner.setOnClickListener(v -> {
+            // Dùng geo URI nếu muốn chính xác vị trí
+//    String geoUri = "geo:0,0?q=Trường+Đại+Học+FPT";
+//    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+//    intent.setPackage("com.google.android.apps.maps");
+
+            // Cách an toàn hơn (dùng đường dẫn web của Google Maps)
+            String mapUrl = "https://www.google.com/maps/search/?api=1&query=Trường+Đại+Học+FPT+HCM";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
+            startActivity(intent);
         });
 
         // Khởi tạo badge giỏ hàng
@@ -305,3 +320,6 @@ public class Home extends AppCompatActivity {
         }
     }
 }
+
+
+

@@ -28,56 +28,41 @@ public class Profile extends AppCompatActivity {
     private TextView tvUsername, tvEmail;
     private ImageView tvImg;
     private BottomNavigationView bottomNavigationView;
-
     // Mục "Món ăn yêu thích" đã có
     private TextView btnFavorites;
-
     // Mục "Đơn hàng của bạn"
     private LinearLayout llPlacedOrders;
-//tạo profile
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        user = new UserDAO(this); // Khởi tạo DAO để thao tác dữ liệu người dùng
-        tvUsername = findViewById(R.id.tvUserName); // TextView hiển thị tên người dùng
-
-        // Lấy thông tin email đã đăng nhập từ SharedPreferences
+        user = new UserDAO(this);
+        tvUsername = findViewById(R.id.tvUserName);
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String emailPref = sharedPreferences.getString("email", null);
-
         if (emailPref != null) {
-            // Hiển thị lời chào nếu có email trong SharedPreferences
             Toast.makeText(this, "Xin chào " + emailPref, Toast.LENGTH_SHORT).show();
         }
-
-        // Gọi phương thức lấy và hiển thị thông tin user
         getUserInfo(emailPref);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Lắng nghe kết quả trả về từ Activity khác (nếu có chỉnh sửa thông tin)
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == 101 && resultCode == RESULT_OK) {
-            // Nếu chỉnh sửa thành công, lấy lại email và load lại thông tin người dùng
+            // Load lại thông tin người dùng
             SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
             String emailPref = sharedPreferences.getString("email", null);
             getUserInfo(emailPref);
         }
     }
 
-    // Phương thức lấy thông tin người dùng từ CSDL thông qua email và hiển thị lên giao diện
+    // Phương thức lấy thông tin user và hiển thị
     public void getUserInfo(String email) {
-        User currentUser = user.getUserByEmail(email); // Truy vấn user theo email
-
+        User currentUser = user.getUserByEmail(email);
         if (currentUser != null) {
-            tvUsername.setText(currentUser.getName()); // Hiển thị tên người dùng lên TextView
+            tvUsername.setText(currentUser.getName());
         } else {
-            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show(); // Thông báo lỗi nếu không tìm thấy
+            Toast.makeText(this, "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
         }
     }
 }
-

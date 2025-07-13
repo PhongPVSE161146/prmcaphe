@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class List_All_Drink extends AppCompatActivity {
-    // Các biến khai báo UI và dữ liệu
     private RecyclerView recyclerView, recyclerViewCold;
     private ProductAdapter adapterHot, adapterCold;
     private CoffeeDAO coffeeDAO;
@@ -42,7 +41,6 @@ public class List_All_Drink extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Hàm khởi tạo màn hình và ánh xạ các view từ layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_all_drink);
         UserDAO userDAO = new UserDAO(this);
@@ -59,18 +57,17 @@ public class List_All_Drink extends AppCompatActivity {
         btnFilterOver100k = findViewById(R.id.btnFilterOver100k);
 
         coffeeDAO = new CoffeeDAO(this);
-        // Lấy danh sách tất cả sản phẩm từ database
+        // Lấy danh sách món ăn từ cơ sở dữ liệu
         originalList = coffeeDAO.getAllCoffee();
         adapterHot = new ProductAdapter(this, originalList);
         recyclerView.setAdapter(adapterHot);
 
-        // Cài đặt chức năng tìm kiếm
+        // Thiết lập search
         setupSearch();
-
-        // Cài đặt chức năng lọc theo giá
+        
+        // Thiết lập filter
         setupFilters();
 
-        // Chuyển sang PlacedOrderActivity khi click icon người dùng
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +76,6 @@ public class List_All_Drink extends AppCompatActivity {
                 Toast.makeText(List_All_Drink.this, "Quantity increased", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Chuyển về trang chủ khi click tiêu đề
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +85,6 @@ public class List_All_Drink extends AppCompatActivity {
             }
         });
 
-        // Chuyển sang trang giỏ hàng khi click icon giỏ hàng
         imgCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +96,6 @@ public class List_All_Drink extends AppCompatActivity {
     }
 
     private void setupSearch() {
-        // Hàm thiết lập chức năng tìm kiếm theo từ khóa
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -112,7 +105,6 @@ public class List_All_Drink extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Cập nhật nội dung tìm kiếm và áp dụng lọc
                 currentSearchText = s.toString().toLowerCase().trim();
                 applyFilters();
             }
@@ -120,8 +112,6 @@ public class List_All_Drink extends AppCompatActivity {
     }
 
     private void setupFilters() {
-        // Thiết lập các nút lọc theo giá
-
         btnFilterAll.setOnClickListener(v -> {
             currentPriceFilter = "all";
             updateFilterButtonStates(btnFilterAll);
@@ -151,28 +141,27 @@ public class List_All_Drink extends AppCompatActivity {
     }
 
     private void updateFilterButtonStates(Button selectedButton) {
-        // Đặt lại màu cho tất cả nút lọc
+        // Reset tất cả các nút về trạng thái bình thường
         btnFilterAll.setBackgroundTintList(getColorStateList(R.color.white));
         btnFilterUnder50k.setBackgroundTintList(getColorStateList(R.color.white));
         btnFilter50kTo100k.setBackgroundTintList(getColorStateList(R.color.white));
         btnFilterOver100k.setBackgroundTintList(getColorStateList(R.color.white));
 
-        // Đặt màu nổi bật cho nút được chọn
+        // Đặt màu nền cho nút được chọn
         selectedButton.setBackgroundTintList(getColorStateList(R.color.blue));
         selectedButton.setTextColor(getColor(R.color.black));
     }
 
     private void applyFilters() {
-        // Áp dụng cả bộ lọc tìm kiếm và lọc theo giá
         List<Coffee> filteredList = new ArrayList<>();
 
         for (Coffee coffee : originalList) {
-            // Kiểm tra từ khóa tìm kiếm
+            // Kiểm tra điều kiện tìm kiếm
             boolean matchesSearch = currentSearchText.isEmpty() ||
                     coffee.getProductName().toLowerCase().contains(currentSearchText) ||
                     coffee.getFullDescription().toLowerCase().contains(currentSearchText);
 
-            // Kiểm tra điều kiện lọc giá
+            // Kiểm tra điều kiện giá
             boolean matchesPrice = false;
             switch (currentPriceFilter) {
                 case "under50k":
@@ -184,26 +173,25 @@ public class List_All_Drink extends AppCompatActivity {
                 case "over100k":
                     matchesPrice = coffee.getPrice() > 100000;
                     break;
-                default:
-                    matchesPrice = true; // Tất cả
+                default: // "all"
+                    matchesPrice = true;
                     break;
             }
 
-            // Nếu thỏa mãn cả hai điều kiện thì thêm vào danh sách hiển thị
+            // Thêm vào danh sách nếu thỏa mãn cả hai điều kiện
             if (matchesSearch && matchesPrice) {
                 filteredList.add(coffee);
             }
         }
 
-        // Cập nhật danh sách hiển thị trong adapter
+        // Cập nhật adapter với danh sách đã lọc
         adapterHot.updateFoodList(filteredList);
     }
 
     @Override
     protected void onResume() {
-        // Hàm này chạy khi màn hình quay trở lại hoạt động (resume)
-        // Tải lại dữ liệu từ database và áp dụng bộ lọc hiện tại
         super.onResume();
+        // Refresh danh sách khi quay lại màn hình
         originalList = coffeeDAO.getAllCoffee();
         applyFilters();
     }
