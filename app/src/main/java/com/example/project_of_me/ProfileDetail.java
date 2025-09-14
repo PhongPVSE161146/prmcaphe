@@ -21,7 +21,7 @@ public class ProfileDetail extends AppCompatActivity {
 
         // Ánh xạ các TextView trong layout XML với biến Java
         tvUsername = findViewById(R.id.tvUsername);
-        tvEmail = findViewById(R.id.tvEmail);
+        tvEmail = findViewById(R.id.tvEmail);   // Hiển thị email người dùng
         tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
         tvAddress = findViewById(R.id.tvAddress);
         tvRole = findViewById(R.id.tvRole);

@@ -2,9 +2,10 @@ package com.example.project_of_me.Models;
 
 public class User {
     private int id;
-    private String name;
+    private String name; // Tên người dùng
+    // Các trường khác như email, phone, password, address, role
     private String email;
-    private String phone;
+    private String phone; // Số điện thoại người dùng
     private String password;
     private String address;
     private String role;
